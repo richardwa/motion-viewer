@@ -1,0 +1,6 @@
+node_modules
+target
+.cache
+site
+*.log
+motion-config/camera*

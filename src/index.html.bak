@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Doorbell Camera</title>
+  <link rel='icon' href='favicon.ico' type='image/x-icon'/ >
+  <style>
+    .stream {
+      width: 100%;
+      max-width: 1920px;
+      margin: auto;
+      display: block;
+    }
+
+    #captures {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
+
+    #captures>div {
+      margin: 4px;
+      display: inline-block;
+    }
+
+    #captures video {
+      width: 200px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+    <img class="stream" src="/streams/1">
+    <div id="captures"></div>
+</body>
+</html>
+  <script>
+    const parser = new DOMParser();
+    function create(tag, ...children){
+      const p = document.createElement(tag);
+      if (children){
+        children.map(c => p.append(c));
+      }
+      return p;
+    }
+
+    // fetch modified date descending
+    fetch("camera1/?C=M;O=D")
+      .then(r => r.text())
+      .then(text => {
+        const doc = parser.parseFromString(text, "text/html");
+        const links = doc.querySelectorAll('tr td:nth-child(2) a');
+        const dates = doc.querySelectorAll('tr td:nth-child(3)');
+        const captures = document.getElementById('captures');
+        const size = Math.min(links.length, 50);
+
+        // skip first row -- parent directory
+        for (var i = 1; i < size;  i++){
+          const href = links[i].getAttribute("href");
+          const dateStr = dates[i].textContent.trim();
+
+          const video = create("video");
+          video.src = `camera1/${href}`;
+          video.preload = "metadata";
+          video.controls = true;
+
+          const label = create("center");
+          label.textContent = dateStr;
+
+          const div = create('div', video, label);
+          captures.append(div);
+        }
+    });
+  </script>
