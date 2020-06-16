@@ -22,7 +22,7 @@ DIFF=$(curl -s http://localhost/streams/2/current |\
 DIFF_INT=$(printf "%.0f" $DIFF)
 echo diff: $DIFF_INT
 
-if [ $DIFF_INT -lt 5 ]; then
+if [ $DIFF_INT -lt 10 ]; then
     echo "STATUS:closed" 
 else
     echo "STATUS:open"
