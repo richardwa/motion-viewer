@@ -26,7 +26,7 @@ if [ $DIFF_INT -lt 10 ]; then
     echo "STATUS:closed" 
 else
     echo "STATUS:open"
-    NUM_CLOSED=$(grep "STATUS:" $LOG | tail -n 5 | grep "STATUS:closed" | wc -l)
+    NUM_CLOSED=$(tac $LOG | grep "STATUS:" | head -n 5 | wc -l)
 
     # to avoid false notice, only send notice if there were no success in last N runs
     if [ "$NUM_CLOSED" == "0" ]; then
