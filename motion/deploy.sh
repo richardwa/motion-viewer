@@ -9,6 +9,7 @@ sudo chown -R motion:public $root
 
 echo "start_motion_daemon=yes" | sudo tee /etc/default/motion
 sudo cp $DIR/*.conf /etc/motion/
+sudo cp $DIR/clean.sh /usr/local/bin/
 
 sudo systemctl restart motion
 systemctl --no-pager status motion
