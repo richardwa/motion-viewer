@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 LOG=$1
 
 # log timestamp
-date +"%Y-%m %T"
+date +"%Y-%m-%d %T"
 
 # Generate code at http://www.barcode-generator.org/
 # qrcode, data: A
@@ -35,5 +35,5 @@ else
     fi
 fi
 
-# make sure status is on second to last line
+# add line break
 echo ""
