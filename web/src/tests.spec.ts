@@ -1,3 +1,2 @@
-
 console.log('starting');
-require("./util/util.spec");
+import "./util/util.spec"
