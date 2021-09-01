@@ -3,13 +3,13 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # running as root is required.
 
-user=${1:-public}
+export user=public
 root=/home/$user/motion
 
 mkdir -p $root/camera1
 mkdir -p $root/camera2
 mkdir -p $root/camera3
-chown -R motion:public $root
+chown -R motion:$user $root
 
 cat $DIR/clean.sh | envsubst > /usr/local/bin/clean.sh
 cat $DIR/motion.conf | envsubst > /etc/motion/motion.conf 
@@ -24,5 +24,4 @@ done
 
 systemctl restart motion
 systemctl --no-pager status motion
-
-tail -f $root/motion.log
+journalctl -u motion -f
