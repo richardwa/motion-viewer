@@ -1,17 +1,28 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-root=/home/public/motion
+# running as root is required.
 
-sudo mkdir -p $root/camera1
-sudo mkdir -p $root/camera2
-sudo chown -R motion:public $root
+user=${1:-public}
+root=/home/$user/motion
 
-echo "start_motion_daemon=yes" | sudo tee /etc/default/motion
-sudo cp $DIR/*.conf /etc/motion/
-sudo cp $DIR/clean.sh /usr/local/bin/
+mkdir -p $root/camera1
+mkdir -p $root/camera2
+mkdir -p $root/camera3
+chown -R motion:public $root
 
-sudo systemctl restart motion
+cat $DIR/clean.sh | envsubst > /usr/local/bin/clean.sh
+cat $DIR/motion.conf | envsubst > /etc/motion/motion.conf 
+
+echo "start_motion_daemon=yes" > /etc/default/motion
+cd $DIR
+for f in *.conf
+do
+	echo "Processing $f"
+  cat $f | envsubst > /etc/motion/$f 
+done
+
+systemctl restart motion
 systemctl --no-pager status motion
 
-tail -f /home/public/motion/motion.log
+tail -f $root/motion.log
