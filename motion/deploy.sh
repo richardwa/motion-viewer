@@ -13,10 +13,11 @@ cat $DIR/motion.conf | envsubst > /etc/motion/motion.conf
 
 echo "start_motion_daemon=yes" > /etc/default/motion
 cd $DIR
+mkdir -p /etc/motion/cameras
 for f in cameras
 do
 	echo "Processing $f"
-  cat $f | envsubst > /etc/motion/conf.d/$f 
+  cat $f | envsubst > /etc/motion/$f 
 done
 chown -R motion:motion $root
 systemctl restart motion
