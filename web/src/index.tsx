@@ -1,5 +1,7 @@
-import { h, render, Component, FunctionalComponent } from 'preact';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import { Item, getListing } from './util/util';
+import ReactHlsPlayer from 'react-hls-player';
 import jss from 'jss';
 import preset from 'jss-preset-default';
 jss.setup(preset());
@@ -47,15 +49,15 @@ type Camera = {
 
 const cameras: Camera[] = [{
   name: "doorbell",
-  feed: "/streams/1",
+  feed: "/streams/cam1-.m3u8",
   captures: "camera1/"
 }, {
   name: "garage",
-  feed: "/streams/2",
+  feed: "/streams/cam2-.m3u8",
   captures: "camera2/"
 }, {
   name: "stairs",
-  feed: "/streams/3",
+  feed: "/streams/cam3-.m3u8",
   captures: "camera3/"
 }];
 
@@ -64,53 +66,42 @@ type State = {
   clips: Item[];
 }
 
-export class Main extends Component<{}, State> {
-  constructor() {
-    super();
+export class Main extends React.Component<{}, State> {
+  constructor(props) {
+    super(props);
     this.state = {
-      currentCamera: 0,
+      currentCamera: 1,
       clips: []
     }
-    this.retrieveClips();
-  }
-
-  retrieveClips = () => {
-    const { currentCamera } = this.state;
-    const camera = cameras[currentCamera];
-    getListing(`${camera.captures}?C=M;O=D`).then(list => {
-      this.setState({ clips: list.files.slice(0, 10) });
-    })
   }
 
   onClick(i: number) {
     this.setState({ currentCamera: i }, () => {
-      this.retrieveClips();
+      // this.retrieveClips();
     });
   }
 
   render() {
-    const { currentCamera, clips } = this.state;
+    const { currentCamera } = this.state;
     const camera = cameras[currentCamera];
-    return [
+    return (
+    <React.Fragment>
       <div>{
         cameras.map((c, i) =>
-          <img title={c.name}
-            class={classes.preview}
+          <img title={c.name} key={c.name}
+            className={classes.preview}
             onClick={() => this.onClick(i)}
             src={c.feed}></img>)
-      }</div>,
-      <img class={classes.stream} src={camera.feed}></img>,
-      <div class={classes.captures}>{
-        clips.map(f =>
-          <div>
-            <video src={f.path} preload="metadata" controls={true} />
-            <label>{f.name}</label>
-          </div>
-        )
       }</div>
-    ];
+      <ReactHlsPlayer src={camera.feed}
+      autoPlay={true}
+      controls={true}
+      width="100%"
+      height="auto"
+    />
+    </React.Fragment>);
   }
 }
 
 
-render(<Main />, document.body);
+ReactDOM.render(<Main />, document.getElementById("app"));
