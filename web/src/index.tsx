@@ -66,11 +66,28 @@ type State = {
   clips: Item[];
 }
 
+
+function VideoPlayer(props) {
+  const playerRef = React.useRef();
+  const {src} = props;
+  return (
+    <ReactHlsPlayer
+      playerRef={playerRef}
+      src={src}
+      autoplay="true"
+      muted={true}
+      controls={true}
+      width="100%"
+      height="auto"
+    />
+  );
+}
+
 export class Main extends React.Component<{}, State> {
   constructor(props) {
     super(props);
     this.state = {
-      currentCamera: 1,
+      currentCamera: 0,
       clips: []
     }
   }
@@ -82,23 +99,19 @@ export class Main extends React.Component<{}, State> {
   }
 
   render() {
+    
     const { currentCamera } = this.state;
     const camera = cameras[currentCamera];
     return (
     <React.Fragment>
       <div>{
         cameras.map((c, i) =>
-          <img title={c.name} key={c.name}
+          <button title={c.name} key={c.name}
             className={classes.preview}
             onClick={() => this.onClick(i)}
-            src={c.feed}></img>)
+          >{c.name}</button>)
       }</div>
-      <ReactHlsPlayer src={camera.feed}
-      autoPlay={true}
-      controls={true}
-      width="100%"
-      height="auto"
-    />
+      <VideoPlayer src={camera.feed} />
     </React.Fragment>);
   }
 }

@@ -4,13 +4,14 @@
   "description": "Webcam Viewer",
   "scripts": {
     "prebuild": "rimraf site",
-    "build": "parcel build src/index.html",
+    "build": "parcel build src/index.html --public-url='.'",
     "serve": "parcel serve src/index.html",
     "test": "ts-node src/tests.spec.ts",
     "check": "tsc"
   },
   "devDependencies": {
     "@types/express": "^4.17.6",
+    "@types/hls.js": "^1.0.0",
     "@types/react": "^17.0.20",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.3.1",

@@ -952,6 +952,7 @@ var _jss = require("jss");
 var _jssDefault = parcelHelpers.interopDefault(_jss);
 var _jssPresetDefault = require("jss-preset-default");
 var _jssPresetDefaultDefault = parcelHelpers.interopDefault(_jssPresetDefault);
+var _s = $RefreshSig$();
 _jssDefault.default.setup(_jssPresetDefaultDefault.default());
 const { classes  } = _jssDefault.default.createStyleSheet({
     preview: {
@@ -1003,11 +1004,32 @@ const cameras = [
         captures: "camera3/"
     }
 ];
+function VideoPlayer(props) {
+    _s();
+    const playerRef = _react.useRef();
+    const { src  } = props;
+    return(/*#__PURE__*/ _jsxRuntime.jsx(_reactHlsPlayerDefault.default, {
+        playerRef: playerRef,
+        src: src,
+        autoPlay: "true",
+        muted: true,
+        controls: true,
+        width: "100%",
+        height: "auto",
+        __source: {
+            fileName: "src/index.tsx",
+            lineNumber: 74
+        },
+        __self: this
+    }));
+}
+_s(VideoPlayer, "ezlvRaRDG1HW7XN2TkWUyOHHTRM=");
+_c = VideoPlayer;
 class Main extends _react.Component {
     constructor(props){
         super(props);
         this.state = {
-            currentCamera: 1,
+            currentCamera: 0,
             clips: []
         };
     }
@@ -1024,39 +1046,35 @@ class Main extends _react.Component {
         return(/*#__PURE__*/ _jsxRuntime.jsxs(_react.Fragment, {
             __source: {
                 fileName: "src/index.tsx",
-                lineNumber: 88
+                lineNumber: 106
             },
             __self: this,
             children: [
                 /*#__PURE__*/ _jsxRuntime.jsx("div", {
                     __source: {
                         fileName: "src/index.tsx",
-                        lineNumber: 89
+                        lineNumber: 107
                     },
                     __self: this,
-                    children: cameras.map((c, i)=>/*#__PURE__*/ _jsxRuntime.jsx("img", {
+                    children: cameras.map((c, i)=>/*#__PURE__*/ _jsxRuntime.jsx("button", {
                             title: c.name,
                             className: classes.preview,
                             onClick: ()=>this.onClick(i)
                             ,
-                            src: c.feed,
                             __source: {
                                 fileName: "src/index.tsx",
-                                lineNumber: 91
+                                lineNumber: 109
                             },
-                            __self: this
+                            __self: this,
+                            children: c.name
                         }, c.name)
                     )
                 }),
-                /*#__PURE__*/ _jsxRuntime.jsx(_reactHlsPlayerDefault.default, {
+                /*#__PURE__*/ _jsxRuntime.jsx(VideoPlayer, {
                     src: camera.feed,
-                    autoPlay: true,
-                    controls: true,
-                    width: "100%",
-                    height: "auto",
                     __source: {
                         fileName: "src/index.tsx",
-                        lineNumber: 96
+                        lineNumber: 114
                     },
                     __self: this
                 })
@@ -1067,10 +1085,12 @@ class Main extends _react.Component {
 _reactDom.render(/*#__PURE__*/ _jsxRuntime.jsx(Main, {
     __source: {
         fileName: "src/index.tsx",
-        lineNumber: 107
+        lineNumber: 120
     },
     __self: undefined
 }), document.getElementById("app"));
+var _c;
+$RefreshReg$(_c, "VideoPlayer");
 
   $parcel$ReactRefreshHelpers$6892.postlude(module);
 } finally {
