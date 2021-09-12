@@ -22,4 +22,4 @@ done
 chown -R motion:motion $root
 systemctl restart motion
 systemctl --no-pager status motion
-journalctl -u motion -f
+tail -f /home/motion/motion.log
