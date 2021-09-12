@@ -1,5 +1,11 @@
 {
   "/streams": {
     "target": "http://pluto"
+  },
+  "/camera*": {
+    "target": "http://pluto/motion"
+  },
+  "/streams2": {
+    "target": "http://pluto"
   }
 }

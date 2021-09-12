@@ -49,15 +49,15 @@ type Camera = {
 
 const cameras: Camera[] = [{
   name: "doorbell",
-  feed: "/streams/cam1-.m3u8",
+  feed: "/streams/1",
   captures: "camera1/"
 }, {
   name: "garage",
-  feed: "/streams/cam2-.m3u8",
+  feed: "/streams/2",
   captures: "camera2/"
 }, {
   name: "stairs",
-  feed: "/streams/cam3-.m3u8",
+  feed: "/streams/3",
   captures: "camera3/"
 }];
 
@@ -90,28 +90,45 @@ export class Main extends React.Component<{}, State> {
       currentCamera: 0,
       clips: []
     }
+    this.retrieveClips();
   }
 
   onClick(i: number) {
     this.setState({ currentCamera: i }, () => {
-      // this.retrieveClips();
+      this.retrieveClips();
     });
+  }
+  
+  retrieveClips = () => {
+    const { currentCamera } = this.state;
+    const camera = cameras[currentCamera];
+    getListing(`${camera.captures}?C=M;O=D`).then(list => {
+      this.setState({ clips: list.files.slice(0, 10) });
+    })
   }
 
   render() {
     
-    const { currentCamera } = this.state;
+    const { currentCamera, clips } = this.state;
     const camera = cameras[currentCamera];
     return (
     <React.Fragment>
       <div>{
         cameras.map((c, i) =>
-          <button title={c.name} key={c.name}
+          <img title={c.name} key={c.name}
             className={classes.preview}
             onClick={() => this.onClick(i)}
-          >{c.name}</button>)
+            src={c.feed}></img>)
       }</div>
-      <VideoPlayer src={camera.feed} />
+      <img className={classes.stream} src={camera.feed}></img>
+      <div className={classes.captures}>{
+        clips.map(f =>
+          <div>
+            <video src={f.path} preload="metadata" controls={true} />
+            <label>{f.name}</label>
+          </div>
+        )
+      }</div>
     </React.Fragment>);
   }
 }
