@@ -4,9 +4,9 @@
   "description": "Webcam Viewer",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "parcel build src/index.html --public-url='/'",
-    "preserve": "rimraf dist",
-    "serve": "parcel serve src/index.html --public-url='/'",
+    "build": "parcel build src/index.html --public-url='.'",
+    "preserve": "rimraf target",
+    "serve": "parcel serve src/index.html --public-url='/' --dist-dir target",
     "test": "ts-node src/tests.spec.ts",
     "check": "tsc"
   },
