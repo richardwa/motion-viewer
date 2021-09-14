@@ -13,6 +13,9 @@ feeds=( "rtsp://admin:tAThGG2NAr5vjY5@192.168.1.21/Streaming/Channels/101/" \
 "rtsp://rich:9876@192.168.1.163/live" \
 "rtsp://rich:9876@192.168.1.190/live")
 
+keepalive(){
+        
+}
 
 for ((i=0;i<${#feeds[@]};++i)); do
         pos=$(( $i + 1 ))
