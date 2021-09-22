@@ -10,7 +10,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=public
-ExecStart=/usr/bin/re-streamer.sh
+ExecStart=/usr/bin/stream-copy.py
 
 [Install]
 WantedBy=multi-user.target

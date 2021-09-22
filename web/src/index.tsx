@@ -8,10 +8,12 @@ jss.setup(preset());
 
 const { classes } = jss.createStyleSheet({
   preview: {
+    display: "inline-block",
     width: "200px",
     height: "112.5px",
     cursor: "pointer",
-    margin: 4
+    margin: 4,
+    textAlign: "center"
   },
   stream: {
     width: "100%",
@@ -49,15 +51,15 @@ type Camera = {
 
 const cameras: Camera[] = [{
   name: "doorbell",
-  feed: "/streams/1",
+  feed: "/streams2/cam1-.m3u8",
   captures: "camera1/"
 }, {
   name: "garage",
-  feed: "/streams/2",
+  feed: "/streams2/cam2-.m3u8",
   captures: "camera2/"
 }, {
   name: "stairs",
-  feed: "/streams/3",
+  feed: "/streams2/cam3-.m3u8",
   captures: "camera3/"
 }];
 
@@ -68,17 +70,13 @@ type State = {
 
 
 function VideoPlayer(props) {
-  const playerRef = React.useRef();
-  const {src} = props;
+  const {src,...rest} = props;
   return (
     <ReactHlsPlayer
-      playerRef={playerRef}
       src={src}
-      autoplay="true"
+      autoPlay="true"
       muted={true}
-      controls={true}
-      width="100%"
-      height="auto"
+      {...rest}
     />
   );
 }
@@ -114,16 +112,18 @@ export class Main extends React.Component<{}, State> {
     return (
     <React.Fragment>
       <div>{
-        cameras.map((c, i) =>
-          <img title={c.name} key={c.name}
-            className={classes.preview}
-            onClick={() => this.onClick(i)}
-            src={c.feed}></img>)
+          cameras.map((c, i) => <div key={c.name} className={classes.preview} onClick={() => this.onClick(i)}>{
+            (() => i === currentCamera?
+                <div>{c.name}</div>:
+                <VideoPlayer title={c.name} className={classes.preview} src={c.feed} controls={false}></VideoPlayer>)()
+          }</div>)
       }</div>
-      <img className={classes.stream} src={camera.feed}></img>
+      
+      <VideoPlayer className={classes.stream} src={camera.feed} controls={true}></VideoPlayer>
+
       <div className={classes.captures}>{
         clips.map(f =>
-          <div>
+          <div key={f.name}>
             <video src={f.path} preload="metadata" controls={true} />
             <label>{f.name}</label>
           </div>
