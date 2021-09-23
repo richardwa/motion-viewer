@@ -73,6 +73,7 @@ function VideoPlayer(props) {
   return (
     <ReactHlsPlayer
       src={src}
+      startPosition={Infinity}
       autoPlay="true"
       muted="true"
       {...rest}
