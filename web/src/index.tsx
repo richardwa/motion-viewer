@@ -74,6 +74,9 @@ function VideoPlayer(props) {
     <ReactHlsPlayer
       src={src}
       startPosition={Infinity}
+      backBufferLength={60}
+      liveSyncDuration={2}
+      liveMaxLatencyDuration={3}
       autoPlay="true"
       muted="true"
       {...rest}
