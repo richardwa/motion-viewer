@@ -7,7 +7,7 @@ import sys, signal
 target= "/dev/shm/streams"
 cmd = "".join([
   "ffmpeg -i {} -y -c:a copy -c:v copy ",
-  "-hls_time 10 -hls_list_size 10 -start_number 1 -hls_flags delete_segments ",
+  "-hls_time 2 -hls_list_size 10 -start_number 1 -hls_flags delete_segments ",
   target,"/cam{}-.m3u8 -hide_banner -loglevel error"
 ])
 

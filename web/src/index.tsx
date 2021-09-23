@@ -9,8 +9,7 @@ jss.setup(preset());
 const { classes } = jss.createStyleSheet({
   preview: {
     display: "inline-block",
-    width: "200px",
-    height: "112.5px",
+    width: "250px",
     cursor: "pointer",
     margin: 4,
     textAlign: "center"
@@ -75,7 +74,7 @@ function VideoPlayer(props) {
     <ReactHlsPlayer
       src={src}
       autoPlay="true"
-      muted={true}
+      muted="true"
       {...rest}
     />
   );
@@ -114,7 +113,7 @@ export class Main extends React.Component<{}, State> {
       <div>{
           cameras.map((c, i) => <div key={c.name} className={classes.preview} onClick={() => this.onClick(i)}>{
             (() => i === currentCamera?
-                <div>{c.name}</div>:
+                <div className={classes.preview}>{c.name}</div>:
                 <VideoPlayer title={c.name} className={classes.preview} src={c.feed} controls={false}></VideoPlayer>)()
           }</div>)
       }</div>
