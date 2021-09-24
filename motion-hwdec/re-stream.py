@@ -4,7 +4,9 @@ import time
 import os
 import sys, signal
 
+
 cmd = "mpv --hwdec=vaapi-copy --hwdec-image-format=yuv420p {} --of=v4l2 --o=/dev/video{} -no-audio --quiet"
+
 # cmd = "sleep 10"
 
 class Process(multiprocessing.Process):
@@ -22,11 +24,11 @@ class Process(multiprocessing.Process):
           time.sleep(10)
 
 
-feeds= [
-  "rtsp://admin:tAThGG2NAr5vjY5@192.168.1.21/Streaming/Channels/102/",
-  "rtsp://rich:9876@192.168.1.163/live",
-  "rtsp://rich:9876@192.168.1.190/live"
-]
+feed= {
+  1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.1.21/Streaming/Channels/101/",
+  2: "rtsp://rich:9876@192.168.1.163/live",
+  3: "rtsp://rich:9876@192.168.1.190/live"
+}
 
 if __name__ == '__main__':
   ps = []
@@ -41,8 +43,8 @@ if __name__ == '__main__':
 
   signal.signal(signal.SIGINT, signal_handler)
 
-  for i,feed in enumerate(feeds):
-    p = Process(i+1, feed)
+  for i,url in feed.items():
+    p = Process(i, url)
     p.start()
     ps.append(p)
 

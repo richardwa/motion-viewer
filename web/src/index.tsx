@@ -74,7 +74,7 @@ function VideoPlayer(props) {
     <ReactHlsPlayer
       src={src}
       startPosition={Infinity}
-      backBufferLength={60}
+      backBufferLength={30}
       liveSyncDuration={2}
       liveMaxLatencyDuration={3}
       autoPlay="true"
@@ -117,8 +117,11 @@ export class Main extends React.Component<{}, State> {
       <div>{
           cameras.map((c, i) => <div key={c.name} className={classes.preview} onClick={() => this.onClick(i)}>{
             (() => i === currentCamera?
-                <div className={classes.preview}>{c.name}</div>:
-                <VideoPlayer title={c.name} className={classes.preview} src={c.feed} controls={false}></VideoPlayer>)()
+                <div className={classes.preview}><b>{c.name}</b></div>:
+                <div className={classes.preview}>{c.name}</div>
+
+                //<VideoPlayer title={c.name} className={classes.preview} src={c.feed} controls={false}></VideoPlayer>
+                )()
           }</div>)
       }</div>
       
