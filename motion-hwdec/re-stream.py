@@ -25,9 +25,9 @@ class Process(multiprocessing.Process):
 
 
 feed= {
-  1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.1.21/Streaming/Channels/101/",
-  2: "rtsp://rich:9876@192.168.1.163/live",
-  3: "rtsp://rich:9876@192.168.1.190/live"
+  1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/",
+  2: "rtsp://rich:9876@192.168.2.163/live",
+  3: "rtsp://rich:9876@192.168.2.190/live"
 }
 
 if __name__ == '__main__':
