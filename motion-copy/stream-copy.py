@@ -4,12 +4,14 @@ import time
 import os
 import sys, signal
 
-target= "/dev/shm/streams"
+target = "/dev/shm/streams"
+os.makedirs(target, exist_ok=True)
 cmd = "".join([
-  "ffmpeg -i {} -y -c:a copy -c:v copy ",
-  "-hls_time 2 -hls_list_size 10 -start_number 1 -hls_flags delete_segments ",
-  target,"/cam{}-.m3u8 -hide_banner -loglevel error"
+    "ffmpeg -i {} -y -c:a copy -c:v copy ",
+    "-hls_time 2 -hls_list_size 10 -start_number 1 -hls_flags delete_segments ",
+    target, "/cam{}-.m3u8 -hide_banner -loglevel error"
 ])
+
 
 # cmd = "sleep 10"
 
@@ -22,38 +24,39 @@ class Process(multiprocessing.Process):
 
     def run(self):
         while True:
-          print("start {}: {}".format(self.id, self.url))
-          os.system(cmd.format(self.url, self.id))
-          print("stop  {}: {}".format(self.id, self.url))
-          time.sleep(10)
+            print("start {}: {}".format(self.id, self.url))
+            os.system(cmd.format(self.url, self.id))
+            print("stop  {}: {}".format(self.id, self.url))
+            time.sleep(10)
 
 
-feed= {
-  1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/",
-  2: "rtsp://rich:9876@192.168.2.163/live",
-  3: "rtsp://rich:9876@192.168.2.190/live"
+feed = {
+    1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/",
+    2: "rtsp://rich:9876@192.168.2.163/live",
+    3: "rtsp://rich:9876@192.168.2.190/live"
 }
 
 if __name__ == '__main__':
-  ps = []
+    ps = []
 
-  def signal_handler(signal, frame):
-    print("signal handle")
-    for p in ps:
-      p.kill()
 
-    time.sleep(5)
-    sys.exit(0)
+    def signal_handler(signal, frame):
+        print("signal handle")
+        for p in ps:
+            p.kill()
 
-  signal.signal(signal.SIGINT, signal_handler)
+        time.sleep(5)
+        sys.exit(0)
 
-  os.system("rm -rf {}/*".format(target))
 
-  for i,url in feed.items():
-    p = Process(i, url)
-    p.start()
-    ps.append(p)
+    signal.signal(signal.SIGINT, signal_handler)
 
-  while True:
-    time.sleep(5)
+    os.system("rm -rf {}/*".format(target))
 
+    for i, url in feed.items():
+        p = Process(i, url)
+        p.start()
+        ps.append(p)
+
+    while True:
+        time.sleep(5)
