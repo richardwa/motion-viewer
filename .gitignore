@@ -4,3 +4,4 @@ target
 *.log
 .history
 .parcel-cache
+.idea
