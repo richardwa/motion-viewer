@@ -24,7 +24,6 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "cheerio": "^0.22.0",
     "cross-fetch": "^3.1.4",
     "jss": "^10.1.1",
     "jss-preset-default": "^10.1.1",
