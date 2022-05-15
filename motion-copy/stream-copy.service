@@ -1,5 +1,5 @@
 [Unit]
-Description=node dns service
+Description=stream copy service
 After=network.target
 StartLimitIntervalSec=0
 Requires=network-online.target
