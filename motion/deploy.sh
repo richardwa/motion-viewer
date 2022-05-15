@@ -9,6 +9,8 @@ mkdir -p $root/camera2
 mkdir -p $root/camera3
 
 cat $DIR/motion_clean.sh | envsubst > /usr/local/bin/motion_clean.sh
+chmod 755 /usr/local/bin/motion_clean.sh
+
 cat $DIR/motion.conf | envsubst > /etc/motion/motion.conf 
 
 echo "start_motion_daemon=yes" > /etc/default/motion
