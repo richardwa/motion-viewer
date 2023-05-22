@@ -1,62 +1,69 @@
-#!/usr/bin/env python3
-import multiprocessing
-import time
+import concurrent.futures
+import ffmpeg
 import os
-import sys, signal
-
-target = "/dev/shm/streams"
-os.makedirs(target, exist_ok=True)
-cmd = "".join([
-    "ffmpeg -i {} -y -c:a copy -c:v copy ",
-    "-hls_time 2 -hls_list_size 10 -start_number 1 -hls_flags delete_segments ",
-    target, "/cam{}-.m3u8 -hide_banner -loglevel error"
-])
+import schedule
+import time
 
 
-# cmd = "sleep 10"
-
-class Process(multiprocessing.Process):
-    def __init__(self, id, url):
-        super(Process, self).__init__()
-        self.id = id
-        self.url = url
-        self.daemon = True
-
-    def run(self):
-        while True:
-            print("start {}: {}".format(self.id, self.url))
-            os.system(cmd.format(self.url, self.id))
-            print("stop  {}: {}".format(self.id, self.url))
-            time.sleep(10)
-
-
-feed = {
-    1: "rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/",
-#    2: "rtsp://rich:9876@192.168.2.190/live",
-#    3: "rtsp://rich:9876@192.168.2.163/live"
-}
-
-if __name__ == '__main__':
-    ps = []
+def convert_rtsp_to_hls(rtsp_url, output_dir):
+    (
+        ffmpeg.input(rtsp_url, rtsp_transport="tcp")
+        .output(
+            f"{output_dir}/playlist.m3u8",
+            hls_segment_filename=f"{output_dir}/segment_%v-%03d.ts",
+            acodec="copy",
+            vcodec="copy",
+            format="hls",
+            hls_time=60,
+            hls_list_size=30,
+        )
+        .run()
+    )
 
 
-    def signal_handler(signal, frame):
-        print("signal handle")
-        for p in ps:
-            p.kill()
+def cleanup_files(output_dir):
+    current_time = time.time()
+    for filename in os.listdir(output_dir):
+        file_path = os.path.join(output_dir, filename)
+        if (
+            os.path.isfile(file_path)
+            and current_time - os.path.getmtime(file_path) > 4200
+        ):  # 70 minutes = 4200 seconds
+            os.remove(file_path)
 
-        time.sleep(5)
-        sys.exit(0)
+
+# Example streams and output directories
+streams = [
+    {
+        "rtsp_url": "rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/",
+        "output_dir": "temp",
+    },
+    # Add more streams as needed
+]
+
+# Create a thread pool executor
+executor = concurrent.futures.ThreadPoolExecutor()
+
+# Submit each conversion task to the executor
+conversion_tasks = [
+    executor.submit(convert_rtsp_to_hls, stream["rtsp_url"], stream["output_dir"])
+    for stream in streams
+]
 
 
-    signal.signal(signal.SIGINT, signal_handler)
+# Define a function for the file cleanup task
+def file_cleanup_task():
+    for stream in streams:
+        cleanup_files(stream["output_dir"])
 
-    os.system("rm -rf {}/*".format(target))
 
-    for i, url in feed.items():
-        p = Process(i, url)
-        p.start()
-        ps.append(p)
+# Schedule the file cleanup task to run every 60 minutes
+schedule.every(60).minutes.do(file_cleanup_task)
 
-    while True:
-        time.sleep(5)
+# Start an infinite loop to run scheduled tasks
+while True:
+    schedule.run_pending()
+    time.sleep(30)
+
+# Shutdown the executor (this code is unreachable as the infinite loop runs indefinitely)
+executor.shutdown()
