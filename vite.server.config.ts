@@ -1,16 +1,16 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { build, defineConfig } from 'vite'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src/server', import.meta.url))
+      '@': fileURLToPath(new URL('./src/client', import.meta.url)),
+      '@s': fileURLToPath(new URL('./src/server', import.meta.url))
     }
   },
   build: {
-    outDir: './dist/server',
     assetsDir: '',
     copyPublicDir: false,
     rollupOptions: {

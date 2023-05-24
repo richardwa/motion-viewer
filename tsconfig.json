@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "paths": {
+      "@/*": [
+        "./src/client/*"
+      ],
+      "@s/*": [
+        "./src/server/*"
+      ]
+    }
   },
   "files": [],
   "references": [

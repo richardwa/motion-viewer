@@ -9,7 +9,7 @@ const port = args[0]
 app.use(express.static(path.join(__dirname, '../client')))
 
 app.get(`${base}/`, (req, res) => {
-  res.send('Hello, World!')
+  res.send('Hello from server!!')
 })
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)

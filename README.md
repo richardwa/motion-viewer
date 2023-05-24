@@ -1,24 +1,29 @@
-# architecture
-* motion is only for monitoring doorbell cam. 
-    - its output is used are the motion clips that are captured 
-    - we are not using motion's re-broadcast
+# template
 
-* motion-copy is used to repackage rtsp stream to m3u streams.
-    - this is a very light proccess and we are not re-encoding anything
-    - the output streams goto /dev/shm so that we do not wear out our SSD
+npm init vue@latest // yes: router, jsx, typescript, unit test, eslint, prettier
+npm install --save express
+npm install --save-dev nodemon rimraf ts-node zip-build
 
-* web site will combine everything together into front end.  
-    - check personal/apache for more details on the proxying and serving of m3u files.
+make/use template.tgz: npm pack / npm unpack
 
-# troubleshooting
-* check streams using vlc
-    - rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/
-    - http://pluto/streams2/cam1-.m3u8
-    - rtsp://rich:9876@192.168.2.163/live
-    - http://pluto/streams2/cam2-.m3u8
-    - rtsp://rich:9876@192.168.2.190/live
-    - http://pluto/streams2/cam3-.m3u8
+# prod build
 
-* check logs
-    - journalctl -u stream-copy --since "1 day ago"
-    - journalctl -u motion --since "1 day ago"
+npm run build
+
+builds client package
+builds server package
+server will serve static files from client packge when run, keep files in relative to each other
+
+## to actually depoy server
+
+unzip dist/{app}.zip to folder accessible by service runner
+use os service/process management to start, pass port number to startup cmd
+node ./server/server.js {port}
+
+# dev env
+
+npm run dev
+
+vite will run as usual from port 5173
+server will start on port 300
+vite will proxy all calls starting with /srv to server
