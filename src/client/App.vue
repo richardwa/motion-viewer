@@ -21,4 +21,9 @@ import { RouterLink, RouterView } from 'vue-router'
 .link {
   padding: 1rem;
 }
+
+.router-link-active {
+  color: black;
+  cursor: default;
+}
 </style>

@@ -15,24 +15,13 @@ defineProps<{ clips: Item[] }>()
 </template>
 <style scoped>
 .captures {
-  overflow-x: 'scroll';
-  overflow-y: 'hidden';
-  margin-top: '4px';
-  white-space: 'nowrap';
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
 }
-
-.captures > div {
-  margin: '4px';
-  display: 'inline-block';
-}
-
 .captures video {
-  width: '200px';
-  height: '112.5px';
-  display: 'block';
-}
-.captures label {
-  text-align: 'center';
-  display: 'block';
+  height: 8rem;
 }
 </style>

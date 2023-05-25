@@ -33,8 +33,9 @@ const parse = (src: string) => {
     '<td.*?>(.*?)</td>',
     '</tr>'
   ].join('')
-  const array = src.matchAll(new RegExp(regexp, 'g'))
-  for (const row of array) {
+  const array = Array.from(src.matchAll(new RegExp(regexp, 'g')))
+  for (let i = 1; i < array.length; i++) {
+    const row = array[i]
     const path = row[2]
     const item: Item = {
       type: path.endsWith('/') ? 'directory' : 'file',
@@ -54,4 +55,4 @@ const parse = (src: string) => {
 export const getListing = (url: string): Promise<Listing> =>
   fetch(url)
     .then((r) => r.text())
-    .then((t) => parse(t))
+    .then(parse)

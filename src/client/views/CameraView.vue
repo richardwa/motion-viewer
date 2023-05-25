@@ -1,42 +1,46 @@
 <script setup lang="ts">
-import type CarouselListVue from '@/client/components/CarouselList.vue'
-import { cameras } from '@/common/config'
+import CarouselListVue from '@/client/components/CarouselList.vue'
+import { cameras, type Camera } from '@/common/config'
 import { getListing } from '@/common/util'
 import type { Item } from '@/types'
-import { onMounted, ref } from 'vue'
+import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const camIndex = parseInt((route.params.camIndex as string) || '0')
-const camera = cameras[camIndex]
-const clips = ref<Item[]>()
+const camIndex = ref<number>(0)
+const camera = ref<Camera>()
+const clips = ref<Item[]>([])
 
-onMounted(() => {
-  getListing(`${camera.captures}?C=M;O=D`).then((list) => {
+const refresh = () => {
+  camIndex.value = parseInt((route.params.camIndex as string) || '0')
+  camera.value = cameras[camIndex.value]
+  getListing(`${camera.value?.captures}?C=M;O=D`).then((list) => {
     clips.value = list.files.slice(0, 10)
   })
-})
+}
+watch(() => route.params, refresh)
+refresh()
 </script>
 
 <template>
   <main>
-    <video id="videoPlayer" autoplay muted controls :src="camera.feed"></video>
+    <video
+      class="stream"
+      id="videoPlayer"
+      autoplay
+      muted
+      controls
+      :src="`/srv/stream/${camIndex}`"
+    ></video>
     <CarouselListVue :clips="clips" />
   </main>
 </template>
 <style scoped>
-preview {
-  display: 'inline-block';
-  width: '250px';
-  cursor: 'pointer';
-  margin: 4;
-  text-align: 'center';
-}
-
-stream {
-  width: '100%';
-  max-width: '1920px';
-  margin: 'auto';
-  display: 'block';
+.stream {
+  width: 100%;
+  max-width: 10rem;
+  max-width: 100rem;
+  display: block;
+  margin: 0.5rem auto;
 }
 </style>

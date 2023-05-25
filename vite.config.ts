@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -14,7 +13,15 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/srv': 'http://localhost:3000'
+      '/srv': 'http://localhost:3000',
+      '/motion': {
+        target: 'https://pluto',
+        secure: false
+      },
+      '/stream': {
+        target: 'https://pluto',
+        secure: false
+      }
     }
   }
 })
