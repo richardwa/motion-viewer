@@ -4,7 +4,7 @@ import type { IncomingMessage, ServerResponse } from 'http'
 const ffmpegArgs = (url: string) => [
   ...['-i', url],
   ...['-c', 'copy'],
-  ...['-f', 'mkv'],
+  ...['-f', 'matroska'],
   ...['-loglevel', 'error'],
   '-hide_banner',
   'pipe:1'

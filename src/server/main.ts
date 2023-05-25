@@ -51,9 +51,6 @@ const server = http.createServer((req, res) => {
   }
 
   serveStaticFile(req, res)
-
-  res.statusCode = 404
-  res.end('Not found')
   return
 })
 
