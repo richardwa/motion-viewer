@@ -6,6 +6,9 @@
     "cypress.config.*",
     "playwright.config.*"
   ],
+  "exclude": [
+    "src/client/**"
+  ],
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",

@@ -10,6 +10,7 @@ export default defineConfig({
     }
   },
   build: {
+    ssr: true,
     assetsDir: '',
     copyPublicDir: false,
     rollupOptions: {
