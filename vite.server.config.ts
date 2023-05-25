@@ -6,8 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src/client', import.meta.url)),
-      '@s': fileURLToPath(new URL('./src/server', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   build: {

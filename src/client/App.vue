@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { cameras } from '@/common/config'
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 
@@ -6,8 +7,9 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink> |
-        <RouterLink to="/helloserver">Server</RouterLink>
+        <RouterLink class="link" :to="`/camera/${i}`" v-for="(cam, i) in cameras">
+          {{ cam.name }}
+        </RouterLink>
       </nav>
     </div>
   </header>
@@ -15,4 +17,8 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped></style>
+<style scoped>
+.link {
+  padding: 1rem;
+}
+</style>
