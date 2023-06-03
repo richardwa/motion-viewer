@@ -10,11 +10,11 @@
     "src/client/**"
   ],
   "compilerOptions": {
+    "moduleResolution": "node",
     "composite": true,
     "module": "ESNext",
     "types": [
       "node"
     ],
-    "moduleResolution": "node"
   }
 }

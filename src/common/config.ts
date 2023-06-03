@@ -1,3 +1,9 @@
+export const serverBase = '/srv'
+export const endPoints = {
+  hello: `${serverBase}/hello`,
+  stream: `${serverBase}/stream`
+}
+
 export type Camera = {
   name: string
   feed: string
