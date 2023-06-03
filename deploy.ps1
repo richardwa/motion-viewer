@@ -62,6 +62,7 @@ fi
 
 nohup docker run -d \
     -p 8082:8080 \
+    -v ${projectName}:/app/videos \
     --name $projectName \
     $tag `&
 "@

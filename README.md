@@ -1,13 +1,8 @@
-# template
-
-npm init vue@latest // yes: router, jsx, typescript, unit test, eslint, prettier
-npm install --save express
-npm install --save-dev nodemon rimraf ts-node zip-build
-
-make/use template.tgz: npm pack / npm unpack
+# Motion Viewer
+server: re-mux rtsp streams into mkv/hls suitable for web page consumption
+client: view stream and motion clips (as saved by motion)
 
 # prod build
-
 npm run build
 
 builds client package
