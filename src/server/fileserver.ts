@@ -32,25 +32,22 @@ export const serveFolder =
       return true
     }
 
-    // Check if the requested file exists
-    const exists = fs.existsSync(filePath)
-    if (!exists) {
+    if (!fs.existsSync(filePath)) {
       // File not found -- no response, allow next handler
       console.log('file not found')
       return false
     }
 
-    // Read the file and serve its contents
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        sendResponse(res, 500, 'text/plain', 'Error reading the file!')
-      }
+    const stat = fs.statSync(filePath)
+    const data = stat.isFile()
+      ? fs.readFileSync(filePath)
+      : Buffer.from(JSON.stringify(fs.readdirSync(filePath)))
 
-      // Set the appropriate content type based on the file extension
-      const contentType = getContentType(filePath)
-      if (useCache) cache[filePath] = data
-      sendResponse(res, 200, contentType, data)
-    })
+    // Set the appropriate content type based on the file extension
+    const contentType = getContentType(filePath)
+    if (useCache) cache[filePath] = data
+    sendResponse(res, 200, contentType, data)
+
     return true
   }
 
