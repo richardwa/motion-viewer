@@ -10,20 +10,22 @@ const port = args[0]
 
 const clientJS = path.join(process.cwd(), 'build', 'client')
 const feeds = path.join(process.cwd(), 'feeds')
-const clips = path.join(process.cwd(), 'clips')
+const captures = path.join(process.cwd(), 'captures')
 
-cameras.forEach((c) => {
-  const outDir = path.join(feeds, c.name)
-  createFoldersIfNotExist(outDir).then(() => {
+Object.entries(cameras).forEach(([k, c]) => {
+  const outDir = path.join(feeds, k)
+  const captureDir = path.join(captures, k)
+  Promise.all([createFoldersIfNotExist(outDir), createFoldersIfNotExist(captureDir)]).then(() => {
     console.log('starting', c.rtsp)
     console.log('outDir', outDir)
+    console.log('captures', captureDir)
     // streamDaemon(c.rtsp, outDir)
   })
 })
 
 const serveClientJS = serveFolder({ folder: clientJS })
 const serveFeeds = serveFolder({ folder: feeds, startsWith: '/feeds', useCache: false })
-const serveClips = serveFolder({ folder: clips, startsWith: '/clips', useCache: false })
+const serveClips = serveFolder({ folder: captures, startsWith: '/captures', useCache: false })
 
 const server = http.createServer((req, res) => {
   try {

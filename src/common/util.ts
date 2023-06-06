@@ -59,16 +59,10 @@ export const getListing = (url: string): Promise<Listing> =>
     .then((r) => r.text())
     .then(parse)
 
-export async function createFoldersIfNotExist(folderPath: string): Promise<void> {
+export function createFoldersIfNotExist(folderPath: string): void {
   console.log('checking', folderPath)
-  const folders = folderPath.split(path.sep)
-  let currentPath = ''
-
-  for (const folder of folders) {
-    currentPath = path.join(currentPath, folder)
-
-    if (!fs.existsSync(currentPath)) {
-      await fs.promises.mkdir(currentPath)
-    }
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true })
+    console.log(`Created folder: ${folderPath}`)
   }
 }

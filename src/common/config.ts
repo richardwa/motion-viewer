@@ -6,17 +6,13 @@ export const endPoints = {
 
 export type Camera = {
   name: string
-  feed: string
   rtsp: string
   rtspLow: string
-  captures: string
 }
 
-export const cameras: Camera[] = [
-  {
+export const cameras: { [s: string]: Camera } = {
+  doorbell: {
     name: 'Doorbell',
-    feed: '/feeds/Doorbell/playlist.m3u8',
-    captures: '/feeds/Doorbell/',
     rtsp: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/',
     rtspLow: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/102/'
   }
@@ -34,4 +30,4 @@ export const cameras: Camera[] = [
   //   rtspLow: 'rtsp://rich:9876@192.168.2.190/live',
   //   captures: '/motion/camera3/'
   // }
-]
+}

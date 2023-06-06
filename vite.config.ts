@@ -15,7 +15,7 @@ export default defineConfig({
     proxy: {
       '/srv': 'http://localhost:3000',
       '/feeds': 'http://localhost:3000',
-      '/clips': 'http://localhost:3000'
+      '/captures': 'http://localhost:3000'
     }
   }
 })

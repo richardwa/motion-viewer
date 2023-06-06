@@ -35,5 +35,5 @@ coverage
 *.sln
 *.sw?
 
-src/client/feeds
 feeds
+captures
