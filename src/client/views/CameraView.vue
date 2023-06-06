@@ -3,16 +3,17 @@ import CarouselListVue from '@/client/components/CarouselList.vue'
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import VideoPlayer from '@/client/components/VideoPlayer.vue'
-import { getListing } from '@/common/util'
 
 const route = useRoute()
 const clips = ref<string[]>([])
 
 const refresh = () => {
   const key = route.params.key as string
-  getListing(key).then((list) => {
-    clips.value = list.slice(0, 10)
-  })
+  fetch(`/captures/${key}`)
+    .then((r) => r.json() as Promise<string[]>)
+    .then((list) => {
+      clips.value = list.slice(0, 10)
+    })
 }
 watch(() => route.params, refresh)
 refresh()

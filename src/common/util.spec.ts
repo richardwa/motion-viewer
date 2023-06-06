@@ -1,3 +1,8 @@
-import { getListing } from './util';
+import { describe, it, expect } from 'vitest'
+import { hello } from './util'
 
-getListing('http://pluto/motion/camera1/?C=M;O=D').then(console.log);
+describe('test', () => {
+  it('should exec', () => {
+    expect(hello()).toBe('hello')
+  })
+})
