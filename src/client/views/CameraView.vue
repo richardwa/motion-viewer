@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import CarouselListVue from '@/client/components/CarouselList.vue'
-import { cameras, type Camera } from '@/common/config'
-import { getListing } from '@/common/util'
-import type { Item } from '@/types'
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import VideoPlayer from '@/client/components/VideoPlayer.vue'
+import { getListing } from '@/common/util'
 
 const route = useRoute()
-const camIndex = ref<number>(0)
-const camera = ref<Camera>()
-const clips = ref<Item[]>([])
+const clips = ref<string[]>([])
 
 const refresh = () => {
-  camIndex.value = parseInt((route.params.camIndex as string) || '0')
-  camera.value = cameras[camIndex.value]
-  getListing(`${camera.value?.captures}?C=M;O=D`).then((list) => {
-    clips.value = list.files.slice(0, 10)
+  const key = route.params.key as string
+  getListing(key).then((list) => {
+    clips.value = list.slice(0, 10)
   })
 }
 watch(() => route.params, refresh)
@@ -25,7 +20,7 @@ refresh()
 
 <template>
   <main>
-    <VideoPlayer :url="camera?.feed"  />
+    <VideoPlayer :url="`/feeds/${route.params.key}`" />
     <CarouselListVue :clips="clips" />
   </main>
 </template>

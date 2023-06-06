@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { Item } from '@/types'
-defineProps<{ clips: Item[] }>()
+defineProps<{ clips: string[] }>()
 </script>
 
 <template>
   <main>
     <div class="captures">
-      <div :key="f.name" v-for="f in clips">
-        <video :src="f.path" preload="metadata" controls="true" />
-        <label>{{ f.name }}</label>
+      <div :key="clip" v-for="clip in clips">
+        <video :src="clip" preload="metadata" controls="true" />
+        <label>{{ clip }}</label>
       </div>
     </div>
   </main>

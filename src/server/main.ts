@@ -1,9 +1,9 @@
 import { cameras, endPoints } from '@/common/config'
-import { createFoldersIfNotExist } from '@/common/util'
 import http from 'http'
 import path from 'path'
 import { serveFolder } from './fileserver'
 import { streamDaemon } from './restreamer'
+import fs from 'fs'
 
 const args = process.argv.slice(2)
 const port = args[0]
@@ -15,12 +15,13 @@ const captures = path.join(process.cwd(), 'captures')
 Object.entries(cameras).forEach(([k, c]) => {
   const outDir = path.join(feeds, k)
   const captureDir = path.join(captures, k)
-  Promise.all([createFoldersIfNotExist(outDir), createFoldersIfNotExist(captureDir)]).then(() => {
-    console.log('starting', c.rtsp)
-    console.log('outDir', outDir)
-    console.log('captures', captureDir)
-    // streamDaemon(c.rtsp, outDir)
-  })
+  fs.mkdirSync(outDir, { recursive: true })
+  fs.mkdirSync(captureDir, { recursive: true })
+
+  console.log('starting', c.rtsp)
+  console.log('outDir', outDir)
+  console.log('captures', captureDir)
+  // streamDaemon(c.rtsp, outDir)
 })
 
 const serveClientJS = serveFolder({ folder: clientJS })
