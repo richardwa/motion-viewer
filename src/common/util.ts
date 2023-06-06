@@ -1,5 +1,7 @@
 import type { Item, Listing } from '@/types'
 import fetch from 'cross-fetch'
+import fs from 'fs'
+import path from 'path'
 
 const bytes = (str: string) => {
   if (str) {
@@ -56,3 +58,17 @@ export const getListing = (url: string): Promise<Listing> =>
   fetch(url)
     .then((r) => r.text())
     .then(parse)
+
+export async function createFoldersIfNotExist(folderPath: string): Promise<void> {
+  console.log('checking', folderPath)
+  const folders = folderPath.split(path.sep)
+  let currentPath = ''
+
+  for (const folder of folders) {
+    currentPath = path.join(currentPath, folder)
+
+    if (!fs.existsSync(currentPath)) {
+      await fs.promises.mkdir(currentPath)
+    }
+  }
+}

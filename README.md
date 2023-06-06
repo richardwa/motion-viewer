@@ -22,3 +22,4 @@ npm run dev
 vite will run as usual from port 5173
 server will start on port 300
 vite will proxy all calls starting with /srv to server
+ 

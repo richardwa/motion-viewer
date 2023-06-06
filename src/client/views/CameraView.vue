@@ -5,6 +5,7 @@ import { getListing } from '@/common/util'
 import type { Item } from '@/types'
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import VideoPlayer from '@/client/components/VideoPlayer.vue'
 
 const route = useRoute()
 const camIndex = ref<number>(0)
@@ -24,14 +25,7 @@ refresh()
 
 <template>
   <main>
-    <video
-      class="stream"
-      id="videoPlayer"
-      autoplay
-      muted
-      controls
-      :src="`/srv/stream/${camIndex}`"
-    ></video>
+    <VideoPlayer :url="camera?.feed"  />
     <CarouselListVue :clips="clips" />
   </main>
 </template>

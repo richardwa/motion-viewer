@@ -1,47 +1,48 @@
-import { endPoints, cameras } from '@/common/config'
-import { serveStaticFile } from './fileserver'
-import { stream } from './restreamer'
+import { cameras, endPoints } from '@/common/config'
+import { createFoldersIfNotExist } from '@/common/util'
 import http from 'http'
+import path from 'path'
+import { serveFolder } from './fileserver'
+import { streamDaemon } from './restreamer'
 
 const args = process.argv.slice(2)
 const port = args[0]
 
-const server = http.createServer((req, res) => {
-  let pattern = endPoints.hello
-  if (req.url?.startsWith(pattern)) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' })
-    res.end('Hello from server!!')
-    return
-  }
+const clientJS = path.join(process.cwd(), 'build', 'client')
+const feeds = path.join(process.cwd(), 'feeds')
+const clips = path.join(process.cwd(), 'clips')
 
-  pattern = endPoints.stream
-  if (req.url?.startsWith(pattern)) {
-    const id = parseInt(req.url.substring(pattern.length))
-    const camera = cameras[id]
-    if (!camera) {
-      res.writeHead(400, { 'Content-Type': 'text/plain' })
-      res.end('no config for stream #' + id)
+cameras.forEach((c) => {
+  const outDir = path.join(feeds, c.name)
+  createFoldersIfNotExist(outDir).then(() => {
+    console.log('starting', c.rtsp)
+    console.log('outDir', outDir)
+    // streamDaemon(c.rtsp, outDir)
+  })
+})
+
+const serveClientJS = serveFolder({ folder: clientJS })
+const serveFeeds = serveFolder({ folder: feeds, startsWith: '/feeds', useCache: false })
+const serveClips = serveFolder({ folder: clips, startsWith: '/clips', useCache: false })
+
+const server = http.createServer((req, res) => {
+  try {
+    let pattern = endPoints.hello
+    if (req.url?.startsWith(pattern)) {
+      res.writeHead(200, { 'Content-Type': 'text/plain' })
+      res.end('Hello from server!!')
       return
     }
-    res.writeHead(200, { 'Content-Type': 'video/x-matroska' })
-    const s = stream(camera.rtsp)
-    s.stdout.on('data', (data: BinaryData) => {
-      res.write(data)
-    })
-    s.stderr.on('data', (data) => {
-      console.error(`FFmpeg stderr: ${data}`)
-    })
-    s.on('close', (code) => {
-      res.end()
-    })
-    req.on('close', () => {
-      s.kill()
-    })
-    return
-  }
 
-  serveStaticFile(req, res)
-  return
+    const handled = serveClientJS(req, res) || serveFeeds(req, res) || serveClips(req, res)
+    if (handled) return
+
+    res.writeHead(404, { 'Content-Type': 'text/plain' })
+    res.end('File not found!')
+    return
+  } catch (e) {
+    console.log(e)
+  }
 })
 
 server.listen(port, () => {

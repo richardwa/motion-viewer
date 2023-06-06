@@ -34,3 +34,6 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+src/client/feeds
+feeds

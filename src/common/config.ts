@@ -15,10 +15,10 @@ export type Camera = {
 export const cameras: Camera[] = [
   {
     name: 'Doorbell',
-    feed: '/streams2/cam1-.m3u8',
+    feed: '/feeds/Doorbell/playlist.m3u8',
+    captures: '/feeds/Doorbell/',
     rtsp: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/',
-    rtspLow: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/102/',
-    captures: '/motion/camera1/'
+    rtspLow: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/102/'
   }
   // {
   //   name: 'Garage',

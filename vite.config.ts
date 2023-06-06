@@ -14,14 +14,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/srv': 'http://localhost:3000',
-      '/motion': {
-        target: 'https://pluto',
-        secure: false
-      },
-      '/stream': {
-        target: 'https://pluto',
-        secure: false
-      }
+      '/feeds': 'http://localhost:3000',
+      '/clips': 'http://localhost:3000'
     }
   }
 })
