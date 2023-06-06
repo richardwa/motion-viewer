@@ -20,7 +20,7 @@ refresh()
 
 <template>
   <main>
-    <VideoPlayer :url="`/feeds/${route.params.key}`" />
+    <VideoPlayer :url="`/feeds/${route.params.key}/playlist.m3u8`" />
     <CarouselListVue :clips="clips" />
   </main>
 </template>

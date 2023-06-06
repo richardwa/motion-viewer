@@ -21,7 +21,7 @@ Object.entries(cameras).forEach(([k, c]) => {
   console.log('starting', c.rtsp)
   console.log('outDir', outDir)
   console.log('captures', captureDir)
-  // streamDaemon(c.rtsp, outDir)
+  streamDaemon(c.rtsp, outDir)
 })
 
 const serveClientJS = serveFolder({ folder: clientJS })

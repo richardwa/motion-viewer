@@ -26,6 +26,6 @@ onMounted(() => {
 </script>
 <template>
   <div>
-    <video ref="videoElement" controls muted autoplay></video>
+    <video ref="videoElement" controls autoplay muted></video>
   </div>
 </template>
