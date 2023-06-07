@@ -24,11 +24,7 @@ $copyPattern = '^\s*COPY\s+(?<source>.*?)\s+(?<destination>.*?)\s*$'
 # Iterate through the Dockerfile content and extract COPY lines
 $dockerfileContent | Where-Object { $_ -match $copyPattern } | ForEach-Object {
     $source = $Matches['source']
-    $destination = $Matches['destination']
-
-    $target = Join-Path -Path $projectName -ChildPath $destination
-    $target = $target -replace '\\', '/'
-    scp -r $source "${targetHost}:~/$target" 
+    scp -r $source "${targetHost}:~/$projectName" 
 }
 scp Dockerfile "${targetHost}:~/$projectName"
 
@@ -62,7 +58,7 @@ fi
 
 nohup docker run -d \
     -p 8082:8080 \
-    -v ${projectName}:/app/videos \
+    -v ${projectName}:/app/captures \
     --name $projectName \
     $tag `&
 "@

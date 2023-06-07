@@ -14,6 +14,7 @@ export default defineConfig({
     copyPublicDir: false,
     rollupOptions: {
       output: {
+        format: 'cjs',
         entryFileNames: 'main.js',
         chunkFileNames: 'server-chunk-[hash].js'
       },

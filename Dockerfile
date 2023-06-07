@@ -17,5 +17,5 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Expose the specified port
 EXPOSE 8080
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh ./
+CMD ["/bin/bash","entrypoint.sh"]
