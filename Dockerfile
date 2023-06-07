@@ -3,9 +3,10 @@ FROM node:bullseye-slim
 
 # Install FFmpeg dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg \
+    ffmpeg motion \ 
     && rm -rf /var/lib/apt/lists/*
 
+COPY conf /etc/motion
 WORKDIR /app
 
 COPY package*.json ./
@@ -16,4 +17,5 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Expose the specified port
 EXPOSE 8080
 
-CMD ["node","./build/server/main.js", "8080"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,36 +1,36 @@
-import { spawn } from 'child_process'
-import path from 'path'
+import { spawn, type ChildProcessWithoutNullStreams } from 'child_process'
+import type { IncomingMessage, ServerResponse } from 'http'
 
-const ffmpegArgs = (url: string, outDir: string) => [
+const ffmpegArgs = (url: string) => [
   ...['-rtsp_transport', 'tcp'],
   ...['-i', url],
-  ...['-c:a', 'copy'],
-  ...['-c:v', 'copy'],
-  ...['-f', 'hls'],
-  ...['-hls_time', '10'],
-  ...['-hls_list_size', '3'],
-  ...['-hls_segment_filename', path.join(outDir, `s-${Date.now()}-%d.ts`)],
+  ...['-c', 'copy'],
+  ...['-f', 'matroska'],
+  ...['-movflags', 'frag_keyframe+empty_moov'],
+  ...['-reset_timestamps', '1'],
+  ...['-loglevel', 'error'],
   '-hide_banner',
-  path.join(outDir, 'playlist.m3u8')
+  'pipe:1'
 ]
 
-export const streamDaemon = (rtsp_url: string, outDir: string): void => {
-  const child = spawn('ffmpeg', ffmpegArgs(rtsp_url, outDir))
-  // child.stdout.pipe(process.stdout)
-  child.stderr.pipe(process.stderr)
+export const streamDaemon = (rtsp_url: string) => runProcess('ffmpeg', ffmpegArgs(rtsp_url))
 
+function runProcess(command: string, args: string[]) {
+  const process = spawn(command, args)
   const timeout = setTimeout(() => {
-    child.kill()
+    process.kill()
   }, 1000 * 60 * 60)
 
-  child.on('exit', (code, signal) => {
+  process.on('exit', (code, signal) => {
     clearTimeout(timeout)
-    console.log(`Process exited with code ${code} and signal ${signal}. Restarting...`)
-    streamDaemon(rtsp_url, outDir)
+    console.error(`Process exited with code ${code} and signal ${signal}. Restarting...`)
+    runProcess(command, args)
   })
 
-  child.on('error', (error) => {
-    console.log('Process encountered an error:', error)
-    streamDaemon(rtsp_url, outDir)
+  process.on('error', (error) => {
+    console.error('Process encountered an error:', error)
+    runProcess(command, args)
   })
+
+  return process
 }
