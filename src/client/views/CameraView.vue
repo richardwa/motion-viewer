@@ -3,6 +3,7 @@ import CarouselListVue from '@/client/components/CarouselList.vue'
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import VideoPlayer from '@/client/components/VideoPlayer.vue'
+import { endPoints } from '@/common/config'
 
 const route = useRoute()
 const clips = ref<string[]>([])
@@ -21,7 +22,7 @@ refresh()
 
 <template>
   <main>
-    <VideoPlayer :url="`/feeds/${route.params.key}/playlist.m3u8`" />
+    <VideoPlayer :url="`${endPoints.stream}/${route.params.key}`" />
     <CarouselListVue :clips="clips" />
   </main>
 </template>

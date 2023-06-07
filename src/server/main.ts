@@ -48,7 +48,7 @@ const server = http.createServer((req, res) => {
       return
     }
 
-    const handled = serveClientJS(req, res) || serveClips(req, res)
+    const handled = serveClips(req, res) || serveClientJS(req, res)
     if (handled) return
 
     res.writeHead(404, { 'Content-Type': 'text/plain' })
