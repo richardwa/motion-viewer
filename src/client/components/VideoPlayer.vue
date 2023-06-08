@@ -7,6 +7,10 @@ const props = defineProps<{ url?: string }>()
   </div>
 </template>
 <style scoped>
+div {
+  display: flex;
+  padding-bottom: var(--gap);
+}
 img {
   width: 100%;
   max-width: 1600px;

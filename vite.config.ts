@@ -13,8 +13,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/srv/stream': 'https://cam.mangosplit.com',
+      '/captures': 'https://cam.mangosplit.com',
       '/srv': 'http://localhost:3000',
-      '/captures': 'http://localhost:3000'
     }
   }
 })

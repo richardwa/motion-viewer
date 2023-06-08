@@ -6,9 +6,21 @@
 }
 
 a {
-  text-decoration: none;
   color: blue;
+  text-decoration: none;
 }
+
 a:hover {
   text-decoration: underline;
+}
+
+a.router-link-active,
+a.router-link-exact-active {
+  color: unset;
+  cursor: default;
+  text-decoration: none;
+}
+
+:root {
+  --gap: 0.5rem;
 }

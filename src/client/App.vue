@@ -7,7 +7,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink class="link" :to="`/camera/${i}`" v-for="(cam, i) in cameras">
+        <RouterLink :class="$style.link" :to="`/camera/${i}`" v-for="(cam, i) in cameras">
           {{ cam.name }}
         </RouterLink>
       </nav>
@@ -17,13 +17,19 @@ import { RouterLink, RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped>
-.link {
-  padding: 1rem;
+<style module>
+nav {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
 }
-
-.router-link-active {
-  color: black;
-  cursor: default;
+.link {
+  padding: 1rem 2rem;
+  font-size: larger;
+  border: 1px solid gray;
+  border-collapse: collapse;
+  margin-right: -1px;
+  width: 10rem;
+  text-align: center;
 }
 </style>

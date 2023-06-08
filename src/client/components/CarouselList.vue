@@ -18,7 +18,7 @@ defineProps<{ base?: string; clips: string[] }>()
   overflow-y: hidden;
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: var(--gap);
 }
 .captures video {
   height: 8rem;
