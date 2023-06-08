@@ -3,6 +3,13 @@ const props = defineProps<{ url?: string }>()
 </script>
 <template>
   <div>
-    <video :src="props.url" controls autoplay muted></video>
+    <img :src="url" />
   </div>
 </template>
+<style scoped>
+img {
+  width: 100%;
+  max-width: 1600px;
+  margin: auto;
+}
+</style>
