@@ -10,10 +10,11 @@ const clips = ref<string[]>([])
 
 const refresh = () => {
   const key = route.params.key as string
-  fetch(`/captures/${key}`)
+  const base = `/captures/${key}`
+  fetch(base)
     .then((r) => r.json() as Promise<string[]>)
     .then((list) => {
-      clips.value = list.slice(0, 10)
+      clips.value = list.map(s => `${base}/${s}`).slice(0, 15)
     })
 }
 watch(() => route.params, refresh)
