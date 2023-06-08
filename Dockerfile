@@ -19,7 +19,7 @@ EXPOSE 8080
 
 COPY entrypoint.sh ./
 
-RUN chown -R motion:motion /app/captures
+VOLUME ["/app/captures"]
 RUN id -u motion >/dev/null 2>&1 || useradd --no-create-home --shell /bin/bash motion
 USER motion
 CMD ["/bin/bash","entrypoint.sh"]
