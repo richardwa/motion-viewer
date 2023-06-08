@@ -19,8 +19,8 @@ EXPOSE 8080
 
 COPY entrypoint.sh ./
 
-RUN id -u motion >/dev/null 2>&1 || \ 
-    (groupadd --gid 1001 motion && \
-    useradd --uid 1001 --gid 1001 --no-create-home --shell /bin/bash motion)
-USER motion
+RUN id -u motion2 >/dev/null 2>&1 || \ 
+    (groupadd --gid 1001 motion2 && \
+    useradd --uid 1001 --gid 1001 --no-create-home --shell /bin/bash motion2)
+USER motion2
 CMD ["/bin/bash","entrypoint.sh"]
