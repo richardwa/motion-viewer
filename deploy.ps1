@@ -3,6 +3,9 @@ if (-not (Test-Path -Path Dockerfile)) {
     Write-Host "Dockerfile required at current directory"
     Exit
 }
+git add .
+git commit -m"update"
+npm run build
 
 $targetHost = 'rich@omv'
 
@@ -58,6 +61,7 @@ fi
 
 nohup docker run -d \
     -p 8082:8080 \
+    -p 8083:8083 \
     -v ${projectName}:/app/captures \
     --name $projectName \
     $tag `&

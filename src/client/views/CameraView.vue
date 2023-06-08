@@ -3,18 +3,20 @@ import CarouselListVue from '@/client/components/CarouselList.vue'
 import { watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import VideoPlayer from '@/client/components/VideoPlayer.vue'
-import { endPoints } from '@/common/config'
+import { cameras, type Camera } from '@/common/config'
 
 const route = useRoute()
 const clips = ref<string[]>([])
+const camera = ref<Camera>()
 
 const refresh = () => {
   const key = route.params.key as string
-  const base = `/captures/${key}`
-  fetch(base)
+  const cam = cameras[key]
+  camera.value = cam
+  fetch(cam.captures)
     .then((r) => r.json() as Promise<string[]>)
     .then((list) => {
-      clips.value = list.map(s => `${base}/${s}`).slice(0, 15)
+      clips.value = list.slice(0, 15)
     })
 }
 watch(() => route.params, refresh)
@@ -23,8 +25,8 @@ refresh()
 
 <template>
   <main>
-    <VideoPlayer :url="`${endPoints.stream}/${route.params.key}`" />
-    <CarouselListVue :clips="clips" />
+    <VideoPlayer :url="camera?.feed" />
+    <CarouselListVue :base="camera?.captures" :clips="clips" />
   </main>
 </template>
 <style scoped>

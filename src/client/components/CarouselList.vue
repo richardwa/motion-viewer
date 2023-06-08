@@ -1,12 +1,12 @@
 <script setup lang="ts">
-defineProps<{ clips: string[] }>()
+defineProps<{ base?: string; clips: string[] }>()
 </script>
 
 <template>
   <main>
     <div class="captures">
       <div :key="clip" v-for="clip in clips">
-        <video :src="clip" preload="metadata" controls="true" />
+        <video :src="`${base}/${clip}`" preload="metadata" controls="true" />
         <label>{{ clip }}</label>
       </div>
     </div>

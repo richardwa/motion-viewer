@@ -1,27 +1,21 @@
 export const serverBase = '/srv'
 export const endPoints = {
   hello: `${serverBase}/hello`,
-  stream: `${serverBase}/stream`
+  stream: `${serverBase}/stream`,
+  captures: `/captures`,
 }
+
 
 export type Camera = {
   name: string
-  rtsp: string
+  feed: string,
+  captures: string,
 }
 
 export const cameras: { [s: string]: Camera } = {
   doorbell: {
     name: 'Doorbell',
-    rtsp: 'rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/',
+    feed: `${endPoints.stream}/1/stream`,
+    captures: `${endPoints.captures}/doorbell`
   }
-  // {
-  //   name: 'Garage',
-  //   feed: '/streams2/cam2-.m3u8',
-  //   rtsp: 'rtsp://rich:9876@192.168.2.163/live',
-  // },
-  // {
-  //   name: 'Stairs',
-  //   feed: '/streams2/cam3-.m3u8',
-  //   rtsp: 'rtsp://rich:9876@192.168.2.190/live',
-  // }
 }
