@@ -29,7 +29,7 @@ handlers[endPoints.hello] = (req, res, m) => {
 }
 
 handlers[endPoints.stream] = (req, res, m) => {
-  const target = `http://cam.mangosplit.com:8083/${req.url?.substring(m.length + 1)}`
+  const target = `http://localhost:8083/${req.url?.substring(m.length + 1)}`
   console.log('target', target)
   proxy.web(req, res, { target });
   return true

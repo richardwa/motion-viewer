@@ -1,6 +1,5 @@
 # Use a base image with Node.js pre-installed
 FROM node:bullseye-slim
-RUN useradd --no-create-home --shell /bin/bash motion
 
 # Install FFmpeg dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -20,5 +19,6 @@ EXPOSE 8080
 
 COPY entrypoint.sh ./
 
+RUN useradd --no-create-home --shell /bin/bash motion
 USER motion
 CMD ["/bin/bash","entrypoint.sh"]
