@@ -8,12 +8,10 @@ const selected = ref<number>()
 <template>
   <main>
     <div class="captures">
-      <div :key="clip" v-for="(clip, i) in clips">
-        <div @click="selected = i">
-          <video :src="`${base}/${clip}`" controls preload="metadata" v-if="i === selected" />
-          <img v-lazy="`${base}/${clip}.jpg`" v-else />
-          <label>{{ clip }}</label>
-        </div>
+      <div :key="clip" v-for="(clip, i) in clips" @click="selected = i">
+        <video :src="`${base}/${clip}`" controls preload="metadata" v-if="i === selected" />
+        <img v-lazy="`${base}/${clip}.jpg`" v-else />
+        <label>{{ clip }}</label>
       </div>
     </div>
   </main>
@@ -26,10 +24,18 @@ const selected = ref<number>()
   flex-direction: row;
   gap: var(--gap);
 }
+.captures > div {
+  display: flex;
+  flex-direction: column;
+}
+
 .captures video,
 .captures img {
   height: 8rem;
   aspect-ratio: 16/9;
   background-color: #ccc;
+}
+.captures label {
+  align-self: center;
 }
 </style>
