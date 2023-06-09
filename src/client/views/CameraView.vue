@@ -29,12 +29,3 @@ refresh()
     <CarouselListVue :base="camera?.captures" :clips="clips" />
   </main>
 </template>
-<style scoped>
-.stream {
-  width: 100%;
-  max-width: 10rem;
-  max-width: 100rem;
-  display: block;
-  margin: 0.5rem auto; 
-}
-</style>

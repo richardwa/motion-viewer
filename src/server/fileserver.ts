@@ -21,8 +21,8 @@ export const serveFolder =
     const url = req.url.substring(startsWith.length)
     const filePath = path.join(folder, url)
 
-    console.log(req.method, req.url)
-    console.log('filePath', filePath)
+    // console.log(req.method, req.url)
+    // console.log('filePath', filePath)
 
     // Check if the file is in the cache
     if (useCache && cache[filePath]) {

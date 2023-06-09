@@ -14,7 +14,7 @@ div {
 
 img {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1200px;
   margin: auto;
   aspect-ratio: 16/9;
 }

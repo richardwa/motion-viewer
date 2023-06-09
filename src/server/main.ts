@@ -28,7 +28,7 @@ app.get(endPoints.hello, (req, res) => {
 app.get(`${endPoints.stream}/*`, (req, res) => {
   const url = req.url?.substring(endPoints.stream.length + 1)
   const target = `http://localhost:8083/${url}`
-  console.log('target', target)
+  // console.log('target', target)
   proxy.web(req, res, { target })
 })
 

@@ -21,7 +21,7 @@ import { RouterLink, RouterView } from 'vue-router'
 nav {
   display: flex;
   flex-direction: row;
-  margin-bottom: 10px;
+  margin-bottom: var(--gap);
 }
 .link {
   padding: 1rem 2rem;
