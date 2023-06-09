@@ -22,6 +22,7 @@
     "express": "^4.18.2",
     "http-proxy": "^1.18.1",
     "vue": "^3.3.2",
+    "vue-lazyload": "^3.0.0",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {

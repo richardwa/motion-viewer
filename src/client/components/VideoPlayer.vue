@@ -11,9 +11,11 @@ div {
   display: flex;
   padding-bottom: var(--gap);
 }
+
 img {
   width: 100%;
   max-width: 1600px;
   margin: auto;
+  aspect-ratio: 16/9;
 }
 </style>

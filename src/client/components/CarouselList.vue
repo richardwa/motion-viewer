@@ -11,7 +11,7 @@ const selected = ref<number>()
       <div :key="clip" v-for="(clip, i) in clips">
         <div @click="selected = i">
           <video :src="`${base}/${clip}`" controls preload="metadata" v-if="i === selected" />
-          <img :src="`${base}/${clip}.jpg`" v-else />
+          <img v-lazy="`${base}/${clip}.jpg`" v-else />
           <label>{{ clip }}</label>
         </div>
       </div>
@@ -29,5 +29,7 @@ const selected = ref<number>()
 .captures video,
 .captures img {
   height: 8rem;
+  aspect-ratio: 16/9;
+  background-color: #ccc;
 }
 </style>
