@@ -64,6 +64,7 @@ nohup docker run --device=/dev/dri:/dev/dri -d \
     -p 8083:8083 \
     -v ${projectName}:/app/captures \
     -v /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri \
+    --restart=unless-stopped \
     --name $projectName \
     $tag `&
 "@
