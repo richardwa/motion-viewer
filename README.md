@@ -22,4 +22,7 @@ npm run dev
 vite will run as usual from port 5173
 server will start on port 300
 vite will proxy all calls starting with /srv to server
- 
+
+# notes
+
+ffmpeg -i rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/ -c:v h264_qsv -f null -

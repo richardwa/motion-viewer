@@ -1,10 +1,11 @@
-# Use a base image with Node.js pre-installed
 FROM node:bullseye-slim
 
-# Install FFmpeg dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg motion \ 
     && rm -rf /var/lib/apt/lists/*
+
+ENV LIBVA_DRIVER_NAME=i965
+ENV LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
 
 COPY conf /etc/motion
 WORKDIR /app
@@ -14,7 +15,6 @@ COPY build ./build
 
 RUN npm ci --omit=dev && npm cache clean --force
 
-# Expose the specified port
 EXPOSE 8080
 
 COPY entrypoint.sh ./

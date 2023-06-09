@@ -59,10 +59,11 @@ else
   echo "Container $projectName does not exist."
 fi
 
-nohup docker run -d \
+nohup docker run --device=/dev/dri:/dev/dri -d \
     -p 8082:8080 \
     -p 8083:8083 \
     -v ${projectName}:/app/captures \
+    -v /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri \
     --name $projectName \
     $tag `&
 "@
