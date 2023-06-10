@@ -6,6 +6,10 @@ if (-not (Test-Path -Path Dockerfile)) {
 git add .
 git commit -m"update"
 npm run build
+$gitHash = & git rev-parse HEAD
+$shortGitHash = $gitHash.Substring(0, 6)
+$tag = "${projectName}:$shortGitHash"
+echo "commit: $gitHash, date: $(Date)" > ./build/client/version.txt
 
 $targetHost = 'rich@omv'
 
@@ -30,10 +34,6 @@ $dockerfileContent | Where-Object { $_ -match $copyPattern } | ForEach-Object {
     scp -r $source "${targetHost}:~/$projectName" 
 }
 scp Dockerfile "${targetHost}:~/$projectName"
-
-$gitHash = & git rev-parse HEAD
-$shortGitHash = $gitHash.Substring(0, 6)
-$tag = "${projectName}:$shortGitHash"
 
 $script = @"
 echo "first line not executed - not sure why"
