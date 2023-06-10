@@ -3,6 +3,9 @@ if (-not (Test-Path -Path Dockerfile)) {
     Write-Host "Dockerfile required at current directory"
     Exit
 }
+$currentDirectoryPath = Get-Location
+$projectName = Split-Path -Leaf $currentDirectoryPath
+
 git add .
 git commit -m"update"
 npm run build
@@ -12,13 +15,6 @@ $tag = "${projectName}:$shortGitHash"
 echo "commit: $gitHash, date: $(Date)" > ./build/client/version.txt
 
 $targetHost = 'rich@omv'
-
-# Get the current working directory path
-$currentDirectoryPath = Get-Location
-
-# Extract the directory name from the path
-$projectName = Split-Path -Leaf $currentDirectoryPath
-
 
 ssh $targetHost "rm -rf $projectName && mkdir $projectName"
 
