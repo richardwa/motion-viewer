@@ -1,4 +1,3 @@
-
 if (-not (Test-Path -Path Dockerfile)) {
     Write-Host "Dockerfile required at current directory"
     Exit
@@ -12,25 +11,22 @@ npm run build
 $gitHash = & git rev-parse HEAD
 $shortGitHash = $gitHash.Substring(0, 6)
 $tag = "${projectName}:$shortGitHash"
-echo "commit: $gitHash, date: $(Date)" > ./build/client/version.txt
+Write-Output "commit: $gitHash, date: $(Date)" > ./build/client/version.txt
 
 $targetHost = 'rich@omv'
-
+# prepare server
 ssh $targetHost "rm -rf $projectName && mkdir $projectName"
 
-# Read the Dockerfile content
-$dockerfileContent = Get-Content -Path Dockerfile
-
-# Regular expression pattern to match COPY lines
-$copyPattern = '^\s*COPY\s+(?<source>.*?)\s+(?<destination>.*?)\s*$'
-
 # Iterate through the Dockerfile content and extract COPY lines
+$dockerfileContent = Get-Content -Path Dockerfile
+$copyPattern = '^\s*COPY\s+(?<source>.*?)\s+(?<destination>.*?)\s*$'
 $dockerfileContent | Where-Object { $_ -match $copyPattern } | ForEach-Object {
     $source = $Matches['source']
     scp -r $source "${targetHost}:~/$projectName" 
 }
 scp Dockerfile "${targetHost}:~/$projectName"
 
+# generate remote script for deployment
 $script = @"
 echo "first line not executed - not sure why"
 
@@ -55,16 +51,16 @@ else
   echo "Container $projectName does not exist."
 fi
 
-nohup docker run --device=/dev/dri:/dev/dri -d \
-    -p 8082:8080 \
-    -p 8083:8083 \
-    -v ${projectName}:/app/captures \
-    -v /usr/lib/x86_64-linux-gnu/dri:/usr/lib/x86_64-linux-gnu/dri \
-    --restart=unless-stopped \
-    --name $projectName \
-    $tag `&
+nohup docker run -d \
+  -e TZ=America/New_York \
+  -p 8082:8080 \
+  -p 8083:8083 \
+  -v ${projectName}:/app/captures \
+  --device=/dev/dri:/dev/dri \
+  --restart=unless-stopped \
+  --name $projectName \
+  $tag `&
 "@
-
 Write-Host $script
 $script = $script -replace "`r", ""
 ssh rich@omv bash -c $script
