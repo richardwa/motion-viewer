@@ -1,28 +1,21 @@
 # Motion Viewer
-server: re-mux rtsp streams into mkv/hls suitable for web page consumption
-client: view stream and motion clips (as saved by motion)
+- ~~server: re-mux rtsp streams into mkv/hls suitable for web page consumption~~
+- server: serves js bundle and proxies motion re-stream
+- client: view stream and motion clips (as saved by motion)
+<hr>
 
-# prod build
-npm run build
+## PROD - npm run build
+- builds client package
+- builds server package
+- server will serve static files from client packge when run, keep files in relative to each other
+<hr>
 
-builds client package
-builds server package
-server will serve static files from client packge when run, keep files in relative to each other
+## DEV - npm run dev
+- vite will run as usual from port 5173
+- server will start on port 3000
+- vite will proxy all calls starting with /srv to server
+<hr>
 
-## to actually depoy server
+## Notes
 
-unzip dist/{app}.zip to folder accessible by service runner
-use os service/process management to start, pass port number to startup cmd
-node ./server/server.js {port}
 
-# dev env
-
-npm run dev
-
-vite will run as usual from port 5173
-server will start on port 300
-vite will proxy all calls starting with /srv to server
-
-# notes
-
-ffmpeg -i rtsp://admin:tAThGG2NAr5vjY5@192.168.2.21/Streaming/Channels/101/ -c:v h264_qsv -f null -
