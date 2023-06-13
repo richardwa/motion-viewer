@@ -16,7 +16,11 @@ const refresh = () => {
   fetch(cam.captures)
     .then((r) => r.json() as Promise<string[]>)
     .then((list) => {
-      clips.value = list.filter((s) => s.endsWith('.mp4')).reverse()
+      clips.value = list
+        .filter((s) => !s.endsWith('.jpg'))
+        .sort()
+        .slice(0, 200)
+        .reverse()
     })
 }
 watch(() => route.params, refresh)

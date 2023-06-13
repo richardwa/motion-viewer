@@ -53,7 +53,7 @@ fi
 
 nohup docker run -d \
   -e TZ=America/New_York \
-  -p 8082:8080 \
+  -p 8082:8082 \
   -p 8083:8083 \
   -v ${projectName}:/app/captures \
   --device=/dev/dri:/dev/dri \
