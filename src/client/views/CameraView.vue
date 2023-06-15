@@ -19,8 +19,8 @@ const refresh = () => {
       clips.value = list
         .filter((s) => !s.endsWith('.jpg'))
         .sort()
-        .slice(0, 200)
         .reverse()
+        .slice(0, 200)
     })
 }
 watch(() => route.params, refresh)
