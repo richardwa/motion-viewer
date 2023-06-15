@@ -4,6 +4,12 @@ import { serveFolder } from './fileserver'
 import httpProxy from 'http-proxy'
 import express from 'express'
 
+// catch-all to prevent node from exiting
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise)
+  console.error('Reason:', reason)
+})
+
 const args = process.argv.slice(2)
 const port = args[0]
 
@@ -28,7 +34,6 @@ app.get(endPoints.hello, (req, res) => {
 app.get(`${endPoints.stream}/*`, (req, res) => {
   const url = req.url?.substring(endPoints.stream.length + 1)
   const target = `http://localhost:8083/${url}`
-  // console.log('target', target)
   proxy.web(req, res, { target })
 })
 
@@ -36,10 +41,10 @@ app.get('/', (req, res) => {
   res.redirect('/index.html')
 })
 
-app.use((req, res) => {
+app.use(async (req, res) => {
   const handled =
-    serveCaptures(req, res) ||
-    serveClientJS(req, res) ||
+    (await serveCaptures(req, res)) ||
+    (await serveClientJS(req, res)) ||
     (() => {
       res.writeHead(404, { 'Content-Type': 'text/plain' })
       res.end('File not found!')

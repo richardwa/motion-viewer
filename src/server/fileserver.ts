@@ -1,5 +1,5 @@
 import http from 'http'
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import path from 'path'
 
 const cache: { [key: string]: Buffer } = {}
@@ -12,7 +12,7 @@ type Props = {
 
 export const serveFolder =
   ({ folder, startsWith = '', useCache = true }: Props) =>
-  (req: http.IncomingMessage, res: http.ServerResponse): boolean => {
+  async (req: http.IncomingMessage, res: http.ServerResponse): Promise<boolean> => {
     if (!req.url || !req.url.startsWith(startsWith)) {
       return false
     }
@@ -20,9 +20,6 @@ export const serveFolder =
     // Get the file path by combining the current working directory with the requested URL
     const url = req.url.substring(startsWith.length)
     const filePath = path.join(folder, url)
-
-    // console.log(req.method, req.url)
-    // console.log('filePath', filePath)
 
     // Check if the file is in the cache
     if (useCache && cache[filePath]) {
@@ -32,22 +29,15 @@ export const serveFolder =
       return true
     }
 
-    if (!fs.existsSync(filePath)) {
-      // File not found -- no response, allow next handler
-      console.log('file not found')
-      return false
-    }
-
-    const stat = fs.statSync(filePath)
-    const data = stat.isFile()
-      ? fs.readFileSync(filePath)
-      : Buffer.from(JSON.stringify(fs.readdirSync(filePath)))
+    const stat = await fs.stat(filePath)
+    const data = await (stat.isFile()
+      ? fs.readFile(filePath)
+      : fs.readdir(filePath).then((s) => Buffer.from(JSON.stringify(s))))
 
     // Set the appropriate content type based on the file extension
     const contentType = getContentType(filePath)
     if (useCache) cache[filePath] = data
     sendResponse(res, 200, contentType, data)
-
     return true
   }
 
